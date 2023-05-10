@@ -3,6 +3,8 @@ const User = require("../models/User");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
+const JWT_SECRET = "Harryisagoodb$oy";
 
 const connectToMongo = require("../db"); // y import hogya
 connectToMongo(); // y call hogya aur niche dekh database se connect bhi hogya dekh rhi h ?? haa aarha h?haa good ab models dekh kya hote h
@@ -47,7 +49,15 @@ router.post(
         email: req.body.email,
         password: secPass,
       });
-      res.json(user);
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authtoken = jwt.sign(data, JWT_SECRET);
+      // console.log(jwtData);
+      res.json({ authtoken });
+      // res.json(user);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Some error occured");
