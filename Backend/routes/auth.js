@@ -71,4 +71,29 @@ router.post(
 );
 // toh humne api hit ki thunder m thunder clieint hogya jisne request ki kisse jidahr y api bni h mtlb yahi hjo h ab usne jo hit kraya uske hissaab se humne response bhej diya ohk ok ab bss thoda kri aajaega itna hi tha y baar baar send kr rha tha toh iska data aata jaa rha mera nhi aarha yaad h mene kaha tha hum log  api hit krate m chahe toh data bhi bhej skte h toh hum log data bhejte h body k andar bhejte h  jb hit krate h  y data bhejugna m jb hit kraunga
 // konsa h tera
+
+// Authenticate a User using : POST "/api/auth/login". No login required
+router.post(
+  "/createuser",
+  [
+    body("email", "Enter a valid email").isEmail(),
+    body("password", "Password cannot be  blank").exists()
+  ],
+  async (req, res) => {
+    // If there are errors , return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const {email, password} = req.body;
+    try {
+      let user = User.findOne({email});
+      if(!user){
+        return res.status(400).json({error:"Sorry"})
+      }
+    } catch (error) {
+      
+    }
+  }
+);
 module.exports = router;
