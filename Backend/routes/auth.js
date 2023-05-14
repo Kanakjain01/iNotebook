@@ -4,13 +4,13 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
-const JWT_SECRET = "Harryisagoodb$oy";
+var fetchuser = require('../middleware/fetchuser');
 
 const connectToMongo = require("../db"); // y import hogya
 connectToMongo(); // y call hogya aur niche dekh database se connect bhi hogya dekh rhi h ?? haa aarha h?haa good ab models dekh kya hote h
 // y teri server file h main ab m cbhah rha hu
 //  toh same idhar h tumeh ek basic schema bna dena h jisme wo uss schema ko bhar bhar k data bnega
-// Create a User using : POST "/api/auth/createuser". No login required
+// ROUTE 1 : Create a User using : POST "/api/auth/createuser". No login required
 //  Doesn't require Auth
 router.post(
   "/createuser",
@@ -60,7 +60,7 @@ router.post(
       // res.json(user);
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Some error occured");
+      res.status(500).send("Internal Server Error");
     }
     // .then((user) => res.json(user))
     // .catch(err => {console.log(err)
@@ -72,12 +72,12 @@ router.post(
 // toh humne api hit ki thunder m thunder clieint hogya jisne request ki kisse jidahr y api bni h mtlb yahi hjo h ab usne jo hit kraya uske hissaab se humne response bhej diya ohk ok ab bss thoda kri aajaega itna hi tha y baar baar send kr rha tha toh iska data aata jaa rha mera nhi aarha yaad h mene kaha tha hum log  api hit krate m chahe toh data bhi bhej skte h toh hum log data bhejte h body k andar bhejte h  jb hit krate h  y data bhejugna m jb hit kraunga
 // konsa h tera
 
-// Authenticate a User using : POST "/api/auth/login". No login required
+// ROUTE 2 : Authenticate a User using : POST "/api/auth/login". No login required
 router.post(
-  "/createuser",
+  "/login",
   [
     body("email", "Enter a valid email").isEmail(),
-    body("password", "Password cannot be  blank").exists()
+    body("password", "Password cannot be  blank").exists(),
   ],
   async (req, res) => {
     // If there are errors , return Bad request and the errors
@@ -85,14 +85,50 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const {email, password} = req.body;
+    const { email, password } = req.body;
+    console.log("here 89",email,password)
     try {
-      let user = User.findOne({email});
-      if(!user){
-        return res.status(400).json({error:"Sorry"})
+      let user = await User.findOne({ email });
+      console.log(user,92)
+      if (!user) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credential" });
       }
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if (!passwordCompare) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credential" });
+      }
+
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authtoken = jwt.sign(data, JWT_SECRET);
+      res.json({ authtoken });
     } catch (error) {
-      
+      console.error(error.message);
+      res.status(500).send("Internal Server error ");
+    }
+  }
+);
+
+// ROUTE 3 : Get loggedin User Details using : POST "/api/auth/getuser".login required
+
+router.post(
+  "/getuser", fetchuser , async (req, res) => {
+    try {
+      console.log(127)
+      userId = req.user.id;
+      const user = await User.findById(userId).select("-password");
+     res.send(user)
+      console.log(user,129)
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server error ");
     }
   }
 );
