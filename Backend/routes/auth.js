@@ -4,7 +4,7 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
-var fetchuser = require('../middleware/fetchuser');
+var fetchuser = require("../middleware/fetchuser");
 
 const connectToMongo = require("../db"); // y import hogya
 connectToMongo(); // y call hogya aur niche dekh database se connect bhi hogya dekh rhi h ?? haa aarha h?haa good ab models dekh kya hote h
@@ -86,10 +86,10 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     const { email, password } = req.body;
-    console.log("here 89",email,password)
+    console.log("here 89", email, password);
     try {
       let user = await User.findOne({ email });
-      console.log(user,92)
+      console.log(user, 92);
       if (!user) {
         return res
           .status(400)
@@ -118,18 +118,16 @@ router.post(
 
 // ROUTE 3 : Get loggedin User Details using : POST "/api/auth/getuser".login required
 
-router.post(
-  "/getuser", fetchuser , async (req, res) => {
-    try {
-      console.log(127)
-      userId = req.user.id;
-      const user = await User.findById(userId).select("-password");
-     res.send(user)
-      console.log(user,129)
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send("Internal Server error ");
-    }
+router.post("/getuser", fetchuser, async (req, res) => {
+  try {
+    console.log(127);
+    userId = req.user.id;
+    const user = await User.findById(userId).select("-password");
+    res.send(user);
+    console.log(user, 129);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server error ");
   }
-);
+});
 module.exports = router;
