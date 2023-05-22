@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 var fetchuser = require("../middleware/fetchuser");
+const JWT_SECRET = "ThisIsJWTSecret"
 
 const connectToMongo = require("../db"); // y import hogya
 connectToMongo(); // y call hogya aur niche dekh database se connect bhi hogya dekh rhi h ?? haa aarha h?haa good ab models dekh kya hote h
