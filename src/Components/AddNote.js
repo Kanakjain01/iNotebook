@@ -29,7 +29,7 @@ const AddNote = () => {
             id="title"
             name="title"
             aria-describedby="emailHelp"
-            onChange={onchange}
+            onChange={onChange}
             placeholder="Enter email"
           />
         </div>
@@ -40,7 +40,7 @@ const AddNote = () => {
             name="description"
             className="form-control"
             id="description"
-            onChange={onchange}
+            onChange={onChange}
           />
         </div>
         <div className="form-group form-check">
@@ -54,7 +54,7 @@ const AddNote = () => {
           </label>
         </div>
         <button type="submit" className="btn btn-primary" onClick={handleClick}>
-          Submit
+          Add Note
         </button>
       </form>
     </div>
