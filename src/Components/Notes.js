@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
@@ -10,9 +10,24 @@ const Notes = () => {
     //eslint-disable-next-line
   }, []);
   const ref = useRef(null);
+  const [note, setNote] = useState({
+    etitle: "",
+    edescription: "",
+    etag: "",
+  });
+  const updateNote = (currentNote) => {
+    ref.current.click()
+    console.log("inside update",ref,currentNote)
+    setNote({etitle:currentNote.title, edescription: currentNote.description , etag: currentNote.tag})
+  };
 
-  const updateNote = (note) => {
-    ref.current.click();
+  const handleClick = (e) => {
+    console.log("Updating the note..." , note)
+    e.preventDefault();
+    
+  };
+  const onChange = (e) => {
+    setNote({ ...note, [e.target.name]: e.target.value });
   };
 
   return (
@@ -21,7 +36,7 @@ const Notes = () => {
       <button
         ref={ref}
         type="button"
-        className="btn btn-primary"
+        className="btn btn-primary d-none"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
@@ -47,9 +62,48 @@ const Notes = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="modal-body">...</div>
+            <div className="modal-body">
+              <form className="my-3">
+                <div className="mb-3">
+                  <label htmlFor="title">title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="etitle"
+                    name="etitle"
+                    value={note.etitle}
+                    aria-describedby="emailHelp"
+                    onChange={onChange}
+                    placeholder="Enter email"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="description">Description</label>
+                  <input
+                    type="text"
+                    name="edescription"
+                    value={note.edescription}
+                    className="form-control"
+                    id="deescription"
+                    onChange={onChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="tag">Tag</label>
+                  <input
+                    type="text"
+                    name="etag"
+                    value ={note.etag}
+                    className="form-control"
+                    id="etag"
+                    onChange={onChange}
+                  />
+                </div>
+              </form>
+            </div>
             <div className="modal-footer">
               <button
+              onClick={handleClick}
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
@@ -57,12 +111,38 @@ const Notes = () => {
                 Close
               </button>
               <button type="button" className="btn btn-primary">
-                Save changes
+                Update note
               </button>
             </div>
           </div>
         </div>
       </div>
+
+
+{/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+
+<div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div className="modal-body">
+        ...
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div> */}
       <div className="container">
         <h2>Your Notes</h2>
         <div className="row my-3 w-[90%] mx-auto">
