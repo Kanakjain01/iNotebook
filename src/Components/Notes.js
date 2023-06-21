@@ -4,7 +4,7 @@ import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
 const Notes = () => {
   const context = useContext(noteContext);
-  const { notes, getNotes , editNote } = context;
+  const { notes, getNotes, editNote } = context;
   useEffect(() => {
     getNotes();
     //eslint-disable-next-line
@@ -29,8 +29,7 @@ const Notes = () => {
   };
 
   const handleClick = (e) => {
-    
-    editNote(note.id , note.etitle , note.edescription , note.etag)
+    editNote(note.id, note.etitle, note.edescription, note.etag);
     refClose.current.click();
   };
   const onChange = (e) => {
@@ -82,6 +81,8 @@ const Notes = () => {
                     aria-describedby="emailHelp"
                     onChange={onChange}
                     placeholder="Enter email"
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -93,6 +94,8 @@ const Notes = () => {
                     className="form-control"
                     id="deescription"
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -118,6 +121,9 @@ const Notes = () => {
                 Close
               </button>
               <button
+                disabled={
+                  note.etitle.length < 5 || note.edescription.length < 5
+                }
                 onClick={handleClick}
                 type="button"
                 className="btn btn-primary"
@@ -155,7 +161,11 @@ const Notes = () => {
 </div> */}
       <div className="container">
         <h2>Your Notes</h2>
-        <div className="row my-3 w-[90%] mx-auto">
+        <div className="row my-3 w-[90%] ">
+          <div className="container ">
+            {notes.length === 0 && "No notes to display"}
+          </div>
+
           {notes.map((note) => {
             return (
               <Noteitem key={note._id} updateNote={updateNote} note={note} />
