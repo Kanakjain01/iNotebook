@@ -45,10 +45,10 @@ const Navbar = () => {
             </li>
           </ul>
           <form className="form-inline my-2 my-lg-0">
-            <Link class="btn btn-primary mx-1" to="/login" role="button">
+            <Link className="btn btn-primary mx-1" to="/login" role="button">
               Login
             </Link>
-            <Link class="btn btn-primary mx-1" to="/signup" role="button">
+            <Link className="btn btn-primary mx-1" to="/signup" role="button">
               Signup
             </Link>
           </form>
