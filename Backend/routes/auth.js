@@ -23,6 +23,7 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success= false;
     // If there are errors , return Bad request and the errors
     //  y req, res y yahi h req means request, respoonse res ab dekhna
     // console.log(req.body); // ab y dekh y h server jo request lega client se  toh req.body krke hume wo data mil jata h jo bheja gya h request m client ki tarafs e
@@ -30,7 +31,7 @@ router.post(
     // user.save();
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success , errors: errors.array() });
     }
     //Check whether the user with this email  exists already
     try {
@@ -39,7 +40,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ error: "Sorry a user with this email already exists" });
+          .json({ success, error: "Sorry a user with this email already exists" });
       }
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(req.body.password, salt);
@@ -57,7 +58,8 @@ router.post(
       };
       const authtoken = jwt.sign(data, JWT_SECRET);
       // console.log(jwtData);
-      res.json({ authtoken });
+      success = true;
+      res.json({  success , authtoken });
       // res.json(user);
     } catch (error) {
       console.error(error.message);
