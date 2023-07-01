@@ -5,7 +5,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 var fetchuser = require("../middleware/fetchuser");
-const JWT_SECRET = "ThisIsJWTSecret"
+const JWT_SECRET = "ThisIsJWTSecret";
 
 const connectToMongo = require("../db"); // y import hogya
 connectToMongo(); // y call hogya aur niche dekh database se connect bhi hogya dekh rhi h ?? haa aarha h?haa good ab models dekh kya hote h
@@ -81,6 +81,7 @@ router.post(
     body("password", "Password cannot be  blank").exists(),
   ],
   async (req, res) => {
+    let success = false;
     // If there are errors , return Bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -92,15 +93,20 @@ router.post(
       let user = await User.findOne({ email });
       console.log(user, 92);
       if (!user) {
+        success = false;
         return res
           .status(400)
           .json({ error: "Please try to login with correct credential" });
       }
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
+        success = false;
         return res
           .status(400)
-          .json({ error: "Please try to login with correct credential" });
+          .json({
+            success,
+            error: "Please try to login with correct credential",
+          });
       }
 
       const data = {
@@ -109,7 +115,8 @@ router.post(
         },
       };
       const authtoken = jwt.sign(data, JWT_SECRET);
-      res.json({ authtoken });
+      success = true;
+      res.json({ success, authtoken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server error ");
