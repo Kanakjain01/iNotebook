@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const Signup = () => {
+const Signup = (props) => {
   const [credentials, setCredentials] = useState({
     name: "",
     email: "",
@@ -30,9 +30,10 @@ const Signup = () => {
       // Save the auth token and redirect
       localStorage.setItem("token", json.authtoken);
       history.push("/");
-    }
-     else {
-      alert("Invalid credentials");
+      props.showAlert("Account Created Successfully ", "success");
+    } 
+    else {
+      props.showAlert("Invalid Credentials", "danger");
     }
   };
   const onChange = (e) => {
@@ -94,7 +95,7 @@ const Signup = () => {
             className="form-control"
             id="cpassword"
             name="cpassword"
-            onChange={onChange} 
+            onChange={onChange}
             minLength={5}
             required
           />
