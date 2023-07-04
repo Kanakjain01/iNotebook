@@ -25,11 +25,11 @@ function App() {
         <Router>
           <Navbar />
           <Alert alert={alert} />
-          <Home />
+          {/* <Home /> */} 
           <div className="container">
             <Switch>
               <Route exact path="/">
-                <Home showAlert={showAlert} />
+                <Home showAlert={showAlert} /> 
               </Route>
               <Route exact path="/about">
                 <About />

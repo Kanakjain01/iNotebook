@@ -9,15 +9,15 @@ const NoteState = (props) => {
   //Get all Notes
   const getNotes = async () => {
     // API Call
+    const token =await localStorage.getItem("token")
     const response = await fetch(`${host}/api/notes/fetchallnotes`, {
       method: "GET",
-
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ2MGIyMmQ0YjllNDM3NjE5NzY1Nzc0In0sImlhdCI6MTY4NDA1ODY5NX0.6w3HNh4Qjm_BUtO2k-OewxLCKl__yLwDVFWFVvPP-Wk",
+        "auth-token":token
       },
     });
+    console.log(token,21)
     const json = await response.json();
 
     setNotes(json);
@@ -32,8 +32,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ2MGIyMmQ0YjllNDM3NjE5NzY1Nzc0In0sImlhdCI6MTY4NDA1ODY5NX0.6w3HNh4Qjm_BUtO2k-OewxLCKl__yLwDVFWFVvPP-Wk",
+        "auth-token": localStorage.getItem("token"),
       },
 
       body: JSON.stringify({ title, description, tag }),
@@ -53,12 +52,11 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ2MGIyMmQ0YjllNDM3NjE5NzY1Nzc0In0sImlhdCI6MTY4NDA1ODY5NX0.6w3HNh4Qjm_BUtO2k-OewxLCKl__yLwDVFWFVvPP-Wk",
+        "auth-token": localStorage.getItem("token"),
       },
     });
     const json = response.json();
-
+console.log(json)
     const newNotes = notes.filter((note) => {
       return note._id !== id;
     });
@@ -72,14 +70,13 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ2MGIyMmQ0YjllNDM3NjE5NzY1Nzc0In0sImlhdCI6MTY4NDA1ODY5NX0.6w3HNh4Qjm_BUtO2k-OewxLCKl__yLwDVFWFVvPP-Wk",
+        "auth-token": localStorage.getItem("token"),
       },
 
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
-
+console.log(json)
     let newNotes = JSON.parse(JSON.stringify(notes));
     // Logic to edit in client
     for (let index = 0; index < notes.length; index++) {
