@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const mongoURI = "mongodb://localhost:27017/inotebook";
+// const mongoURI = "mongodb://localhost:27017/inotebook";
+const mongoURI = "mongodb+srv://inotebook:kanakjainkjb@inotebook.du0fzmh.mongodb.net/?retryWrites=true&w=majority";
 
 const connectToMongo = () => {
   mongoose.connect(mongoURI).then(() => {
@@ -7,4 +8,4 @@ const connectToMongo = () => {
   });
 };
 module.exports = connectToMongo;
-// y jo function bnaya h iss function ko yaha se export kra h main file m iss funciton import krke call krdu toh le
+
