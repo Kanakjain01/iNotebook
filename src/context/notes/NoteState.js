@@ -2,7 +2,8 @@ import { useState } from "react";
 import NoteContext from "./noteContext";
 
 const NoteState = (props) => {
-  const host = "http://localhost:4000";
+  // const host = "http://localhost:4000";
+  const host = "https://inotebook-api-g4vk.onrender.com";
   const notesInitial = [];
   const [notes, setNotes] = useState(notesInitial);
 

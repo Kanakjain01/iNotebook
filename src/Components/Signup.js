@@ -12,7 +12,8 @@ const Signup = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password } = credentials;
-    const response = await fetch("http://localhost:4000/api/auth/createuser", {
+    // const response = await fetch("http://localhost:4000/api/auth/createuser", {
+    const response = await fetch("https://inotebook-api-g4vk.onrender.com//api/auth/createuser", {
       method: "POST",
 
       headers: {
